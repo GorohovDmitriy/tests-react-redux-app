@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { FC, useEffect } from 'react'
+import { Col, Row } from 'antd'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import TableComponent from './components/TableComponent'
 
-export default App;
+import { fetchPosts } from './redux/actions/postsAction'
+import { useAppDispatch, useAppSelector } from './hooks/redux'
+
+const App: FC = React.memo(() => {
+	const dispatch = useAppDispatch()
+	const { posts } = useAppSelector((state) => state.postsReducer)
+
+	useEffect(() => {
+		dispatch(fetchPosts())
+	}, [dispatch])
+
+	return (
+		<div className='wrapper'>
+			<Row>
+				<Col xs={24} md={24}>
+					<TableComponent posts={posts} />
+				</Col>
+			</Row>
+		</div>
+	)
+})
+
+export default App
